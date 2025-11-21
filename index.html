@@ -13,8 +13,6 @@
             --glass-border: rgba(255, 255, 255, 0.2);
             --text-color: #f5f5f7;
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            --error-color: #ff3b30;
-            --success-color: #4CAF50;
         }
 
         * {
@@ -229,49 +227,8 @@
 
         .success-icon {
             font-size: 4rem;
-            color: var(--success-color);
+            color: #4CAF50;
             margin-bottom: 20px;
-        }
-
-        .error-message {
-            display: none;
-            text-align: center;
-            padding: 30px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            box-shadow: var(--shadow);
-            animation: fadeIn 0.5s ease-out;
-            color: var(--error-color);
-        }
-
-        .error-icon {
-            font-size: 4rem;
-            color: var(--error-color);
-            margin-bottom: 20px;
-        }
-
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 30px;
-        }
-
-        .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top: 4px solid var(--accent-color);
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        .validation-error {
-            color: var(--error-color);
-            font-size: 0.85rem;
-            margin-top: 5px;
-            display: none;
         }
 
         footer {
@@ -303,11 +260,6 @@
             50% { transform: translate(20px, 5px) rotate(0deg); }
             75% { transform: translate(10px, -5px) rotate(-5deg); }
             100% { transform: translate(0, 0) rotate(0deg); }
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
 
         /* Responsive Design */
@@ -349,6 +301,7 @@
     <div class="container">
         <header>
             <div class="logo">
+                <i class="fas fa-cube logo-icon"></i>
                 <h1>ZetaCorp</h1>
             </div>
             <p class="subtitle">Online Form - Pengaduan & Masukan</p>
@@ -365,19 +318,16 @@
                 <div class="form-group">
                     <label for="name">Nama Lengkap</label>
                     <input type="text" id="name" name="name" required>
-                    <div class="validation-error" id="nameError">Nama lengkap harus diisi</div>
                 </div>
                 
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" required>
-                    <div class="validation-error" id="emailError">Format email tidak valid</div>
                 </div>
                 
                 <div class="form-group">
                     <label for="phone">Nomor Telepon</label>
-                    <input type="tel" id="phone" name="phone" pattern="[0-9+\-\s()]{10,}">
-                    <div class="validation-error" id="phoneError">Format nomor telepon tidak valid</div>
+                    <input type="tel" id="phone" name="phone">
                 </div>
                 
                 <div class="form-group">
@@ -391,7 +341,6 @@
                         <option value="operations">Operasional</option>
                         <option value="other">Lainnya</option>
                     </select>
-                    <div class="validation-error" id="departmentError">Pilih departemen yang sesuai</div>
                 </div>
                 
                 <div class="form-group">
@@ -403,13 +352,11 @@
                         <option value="high">Tinggi</option>
                         <option value="urgent">Sangat Mendesak</option>
                     </select>
-                    <div class="validation-error" id="priorityError">Pilih tingkat prioritas</div>
                 </div>
                 
                 <div class="form-group">
                     <label for="message">Pesan Pengaduan</label>
-                    <textarea id="message" name="message" placeholder="Jelaskan pengaduan atau masukan Anda secara detail..." required minlength="10"></textarea>
-                    <div class="validation-error" id="messageError">Pesan harus minimal 10 karakter</div>
+                    <textarea id="message" name="message" placeholder="Jelaskan pengaduan atau masukan Anda secara detail..." required></textarea>
                 </div>
                 
                 <button type="submit" class="submit-btn">
@@ -418,40 +365,20 @@
             </form>
         </div>
         
-        <div class="loading" id="loadingMessage">
-            <div class="spinner"></div>
-            <p>Mengirim pengaduan Anda...</p>
-        </div>
-        
         <div class="success-message" id="successMessage">
             <i class="fas fa-check-circle success-icon"></i>
             <h2>Pengaduan Terkirim!</h2>
             <p>Terima kasih telah menghubungi Zeta Corporation. Tim kami akan segera meninjau pengaduan Anda.</p>
         </div>
         
-        <div class="error-message" id="errorMessage">
-            <i class="fas fa-exclamation-circle error-icon"></i>
-            <h2>Gagal Mengirim Pengaduan</h2>
-            <p>Maaf, terjadi kesalahan saat mengirim pengaduan Anda. Silakan coba lagi nanti.</p>
-        </div>
-        
         <footer>
-            <p>&copy; 2025 Zeta Corporation. All rights reserved.</p>
+            <p>&copy; 2023 Zeta Corporation. All rights reserved.</p>
         </footer>
     </div>
 
     <script>
         document.getElementById('zetaForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            // Validasi form
-            if (!validateForm()) {
-                return;
-            }
-            
-            // Tampilkan loading
-            document.getElementById('zetaForm').style.display = 'none';
-            document.getElementById('loadingMessage').style.display = 'block';
             
             // Ambil data dari form
             const formData = new FormData(this);
@@ -464,100 +391,47 @@
                 message: formData.get('message')
             };
             
-            // Kirim data ke server
-            sendToServer(data);
+            // Kirim data ke Telegram (simulasi)
+            sendToTelegram(data);
+            
+            // Tampilkan pesan sukses
+            document.getElementById('zetaForm').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'block';
         });
         
-        function validateForm() {
-            let isValid = true;
+        function sendToTelegram(data) {
+            // Konfigurasi bot Telegram
+            const botToken = '8444005905:AAElv37C877uDOqdROwK2w5AJIIzvCtW5ZI';
+            const chatId = '-5079214240';
             
-            // Validasi nama
-            const name = document.getElementById('name').value.trim();
-            if (name === '') {
-                showError('nameError', 'Nama lengkap harus diisi');
-                isValid = false;
-            } else {
-                hideError('nameError');
-            }
+            // Format pesan
+            const message = `
+Pengaduan Baru dari ZetaCorp Form:
             
-            // Validasi email
-            const email = document.getElementById('email').value.trim();
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                showError('emailError', 'Format email tidak valid');
-                isValid = false;
-            } else {
-                hideError('emailError');
-            }
+Nama: ${data.name}
+Email: ${data.email}
+Telepon: ${data.phone}
+Departemen: ${data.department}
+Prioritas: ${data.priority}
             
-            // Validasi telepon (opsional, tapi jika diisi harus valid)
-            const phone = document.getElementById('phone').value.trim();
-            if (phone && !/^[0-9+\-\s()]{10,}$/.test(phone)) {
-                showError('phoneError', 'Format nomor telepon tidak valid');
-                isValid = false;
-            } else {
-                hideError('phoneError');
-            }
+Pesan:
+${data.message}
+            `;
             
-            // Validasi departemen
-            const department = document.getElementById('department').value;
-            if (!department) {
-                showError('departmentError', 'Pilih departemen yang sesuai');
-                isValid = false;
-            } else {
-                hideError('departmentError');
-            }
+            // Encode pesan untuk URL
+            const encodedMessage = encodeURIComponent(message);
             
-            // Validasi prioritas
-            const priority = document.getElementById('priority').value;
-            if (!priority) {
-                showError('priorityError', 'Pilih tingkat prioritas');
-                isValid = false;
-            } else {
-                hideError('priorityError');
-            }
-            
-            // Validasi pesan
-            const message = document.getElementById('message').value.trim();
-            if (message.length < 10) {
-                showError('messageError', 'Pesan harus minimal 10 karakter');
-                isValid = false;
-            } else {
-                hideError('messageError');
-            }
-            
-            return isValid;
-        }
-        
-        function showError(elementId, message) {
-            const errorElement = document.getElementById(elementId);
-            errorElement.textContent = message;
-            errorElement.style.display = 'block';
-        }
-        
-        function hideError(elementId) {
-            document.getElementById(elementId).style.display = 'none';
-        }
-        
-        function sendToServer(data) {
-            // Simulasi pengiriman ke server
-            // Dalam implementasi nyata, ini akan menggunakan fetch ke endpoint server Anda
-            setTimeout(() => {
-                // Simulasi: 90% berhasil, 10% gagal
-                const isSuccess = Math.random() > 0.1;
-                
-                document.getElementById('loadingMessage').style.display = 'none';
-                
-                if (isSuccess) {
-                    document.getElementById('successMessage').style.display = 'block';
-                    // Reset form
-                    document.getElementById('zetaForm').reset();
-                } else {
-                    document.getElementById('errorMessage').style.display = 'block';
-                    // Tampilkan kembali form
-                    document.getElementById('zetaForm').style.display = 'block';
-                }
-            }, 2000);
+            // Kirim ke Telegram (dalam implementasi nyata, ini akan menggunakan server-side)
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodedMessage}`, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log('Pesan terkirim ke Telegram:', result);
+            })
+            .catch(error => {
+                console.error('Error mengirim ke Telegram:', error);
+            });
         }
     </script>
 </body>
