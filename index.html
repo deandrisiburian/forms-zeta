@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZetaCorp | Online Form</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1d1d1f;
+            --accent-color: #0071e3;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-color: #f5f5f7;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            --error-color: #ff3b30;
+            --success-color: #4CAF50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 50%, #2c2c2c 100%);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+            margin-right: 15px;
+            color: var(--accent-color);
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #fff, #a1c4fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            font-weight: 300;
+        }
+
+        .form-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+            animation: slideUp 0.8s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            z-index: -1;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--text-color);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.2);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--accent-color), #0056b3);
+            color: white;
+            border: none;
+            padding: 16px 30px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 113, 227, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(30deg);
+            transition: all 0.5s ease;
+        }
+
+        .submit-btn:hover::after {
+            transform: rotate(30deg) translate(10%, 10%);
+        }
+
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.03);
+            animation: float 15s infinite linear;
+        }
+
+        .floating-element:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .floating-element:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            left: 80%;
+            animation-delay: -5s;
+        }
+
+        .floating-element:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 80%;
+            left: 10%;
+            animation-delay: -10s;
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: var(--success-color);
+            margin-bottom: 20px;
+        }
+
+        .error-message {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            animation: fadeIn 0.5s ease-out;
+            color: var(--error-color);
+        }
+
+        .error-icon {
+            font-size: 4rem;
+            color: var(--error-color);
+            margin-bottom: 20px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid var(--accent-color);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        .validation-error {
+            color: var(--error-color);
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(10px, 15px) rotate(5deg); }
+            50% { transform: translate(20px, 5px) rotate(0deg); }
+            75% { transform: translate(10px, -5px) rotate(-5deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .form-container {
+                padding: 30px 20px;
+            }
+            
+            .logo-icon {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .form-container {
+                padding: 20px 15px;
+                border-radius: 16px;
+            }
+            
+            input, select, textarea {
+                padding: 12px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <h1>ZetaCorp</h1>
+            </div>
+            <p class="subtitle">Online Form - Pengaduan & Masukan</p>
+        </header>
+        
+        <div class="form-container">
+            <div class="floating-elements">
+                <div class="floating-element"></div>
+                <div class="floating-element"></div>
+                <div class="floating-element"></div>
+            </div>
+            
+            <form id="zetaForm">
+                <div class="form-group">
+                    <label for="name">Nama Lengkap</label>
+                    <input type="text" id="name" name="name" required>
+                    <div class="validation-error" id="nameError">Nama lengkap harus diisi</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                    <div class="validation-error" id="emailError">Format email tidak valid</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Nomor Telepon</label>
+                    <input type="tel" id="phone" name="phone" pattern="[0-9+\-\s()]{10,}">
+                    <div class="validation-error" id="phoneError">Format nomor telepon tidak valid</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="department">Departemen</label>
+                    <select id="department" name="department" required>
+                        <option value="" disabled selected>Pilih departemen</option>
+                        <option value="hr">Sumber Daya Manusia</option>
+                        <option value="tech">Teknologi</option>
+                        <option value="finance">Keuangan</option>
+                        <option value="marketing">Pemasaran</option>
+                        <option value="operations">Operasional</option>
+                        <option value="other">Lainnya</option>
+                    </select>
+                    <div class="validation-error" id="departmentError">Pilih departemen yang sesuai</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="priority">Prioritas</label>
+                    <select id="priority" name="priority" required>
+                        <option value="" disabled selected>Pilih tingkat prioritas</option>
+                        <option value="low">Rendah</option>
+                        <option value="medium">Sedang</option>
+                        <option value="high">Tinggi</option>
+                        <option value="urgent">Sangat Mendesak</option>
+                    </select>
+                    <div class="validation-error" id="priorityError">Pilih tingkat prioritas</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Pesan Pengaduan</label>
+                    <textarea id="message" name="message" placeholder="Jelaskan pengaduan atau masukan Anda secara detail..." required minlength="10"></textarea>
+                    <div class="validation-error" id="messageError">Pesan harus minimal 10 karakter</div>
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-paper-plane"></i> Kirim Pengaduan
+                </button>
+            </form>
+        </div>
+        
+        <div class="loading" id="loadingMessage">
+            <div class="spinner"></div>
+            <p>Mengirim pengaduan Anda...</p>
+        </div>
+        
+        <div class="success-message" id="successMessage">
+            <i class="fas fa-check-circle success-icon"></i>
+            <h2>Pengaduan Terkirim!</h2>
+            <p>Terima kasih telah menghubungi Zeta Corporation. Tim kami akan segera meninjau pengaduan Anda.</p>
+        </div>
+        
+        <div class="error-message" id="errorMessage">
+            <i class="fas fa-exclamation-circle error-icon"></i>
+            <h2>Gagal Mengirim Pengaduan</h2>
+            <p>Maaf, terjadi kesalahan saat mengirim pengaduan Anda. Silakan coba lagi nanti.</p>
+        </div>
+        
+        <footer>
+            <p>&copy; 2025 Zeta Corporation. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('zetaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validasi form
+            if (!validateForm()) {
+                return;
+            }
+            
+            // Tampilkan loading
+            document.getElementById('zetaForm').style.display = 'none';
+            document.getElementById('loadingMessage').style.display = 'block';
+            
+            // Ambil data dari form
+            const formData = new FormData(this);
+            const data = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                department: formData.get('department'),
+                priority: formData.get('priority'),
+                message: formData.get('message')
+            };
+            
+            // Kirim data ke server
+            sendToServer(data);
+        });
+        
+        function validateForm() {
+            let isValid = true;
+            
+            // Validasi nama
+            const name = document.getElementById('name').value.trim();
+            if (name === '') {
+                showError('nameError', 'Nama lengkap harus diisi');
+                isValid = false;
+            } else {
+                hideError('nameError');
+            }
+            
+            // Validasi email
+            const email = document.getElementById('email').value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showError('emailError', 'Format email tidak valid');
+                isValid = false;
+            } else {
+                hideError('emailError');
+            }
+            
+            // Validasi telepon (opsional, tapi jika diisi harus valid)
+            const phone = document.getElementById('phone').value.trim();
+            if (phone && !/^[0-9+\-\s()]{10,}$/.test(phone)) {
+                showError('phoneError', 'Format nomor telepon tidak valid');
+                isValid = false;
+            } else {
+                hideError('phoneError');
+            }
+            
+            // Validasi departemen
+            const department = document.getElementById('department').value;
+            if (!department) {
+                showError('departmentError', 'Pilih departemen yang sesuai');
+                isValid = false;
+            } else {
+                hideError('departmentError');
+            }
+            
+            // Validasi prioritas
+            const priority = document.getElementById('priority').value;
+            if (!priority) {
+                showError('priorityError', 'Pilih tingkat prioritas');
+                isValid = false;
+            } else {
+                hideError('priorityError');
+            }
+            
+            // Validasi pesan
+            const message = document.getElementById('message').value.trim();
+            if (message.length < 10) {
+                showError('messageError', 'Pesan harus minimal 10 karakter');
+                isValid = false;
+            } else {
+                hideError('messageError');
+            }
+            
+            return isValid;
+        }
+        
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+        
+        function hideError(elementId) {
+            document.getElementById(elementId).style.display = 'none';
+        }
+        
+        function sendToServer(data) {
+            // Simulasi pengiriman ke server
+            // Dalam implementasi nyata, ini akan menggunakan fetch ke endpoint server Anda
+            setTimeout(() => {
+                // Simulasi: 90% berhasil, 10% gagal
+                const isSuccess = Math.random() > 0.1;
+                
+                document.getElementById('loadingMessage').style.display = 'none';
+                
+                if (isSuccess) {
+                    document.getElementById('successMessage').style.display = 'block';
+                    // Reset form
+                    document.getElementById('zetaForm').reset();
+                } else {
+                    document.getElementById('errorMessage').style.display = 'block';
+                    // Tampilkan kembali form
+                    document.getElementById('zetaForm').style.display = 'block';
+                }
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
